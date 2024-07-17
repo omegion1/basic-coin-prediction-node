@@ -9,6 +9,7 @@ from chronos import ChronosPipeline
 from sklearn.model_selection import train_test_split
 from updater import download_binance_monthly_data, download_binance_daily_data
 from config import data_base_path
+import random
 
 forecast_price = {}
 
@@ -75,11 +76,19 @@ def train_model(token):
     pipeline = ChronosPipeline.from_pretrained("amazon/chronos-t5-tiny", device_map="auto", torch_dtype=torch.bfloat16)
     forecast = pipeline.predict(context, prediction_length, num_samples=20)
 
-    # print('forecast:', forecast)
+    forecast = np.unique(forecast)
+    print(f"List forecast for {token}: {forecast}")
 
-    median = np.median(forecast.numpy(), axis=1)
+    # Lấy giá thấp nhất và cao nhất
+    min_price = np.min(forecast)
+    max_price = np.max(forecast)
 
-    forecast_price[token] = median[0][-1]
+    # Chọn ngẫu nhiên một giá trị giữa giá thấp nhất và giá cao nhất, để tránh dự đoán giống nhau
+    price_predict = round(random.uniform(min_price, max_price), 4)
+    forecast_price[token] = price_predict
+
+    # median = np.median(forecast.numpy(), axis=1)
+    # forecast_price[token] = median[0][-1]
 
     print(f"Forecasted price for {token}: {forecast_price[token]}")
 
