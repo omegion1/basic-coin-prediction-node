@@ -1,12 +1,6 @@
 import json
-# import pickle
-# import pandas as pd
-# import numpy as np
-# import torch
-from datetime import datetime
-from flask import Flask, jsonify, Response
+from flask import Flask, Response
 from model import download_data, format_data, train_model
-# from config import data_base_path, model_file_path
 import os
 from model import forecast_price
 
