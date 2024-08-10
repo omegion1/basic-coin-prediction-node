@@ -1,13 +1,23 @@
 import json
-from flask import Flask, Response
+# import pickle
+# import pandas as pd
+# import numpy as np
+# import torch
+from datetime import datetime
+from flask import Flask, jsonify, Response
 from model import download_data, format_data, train_model
+# from config import data_base_path, model_file_path
+import os
 from model import forecast_price
+
+API_PORT = int(os.environ.get('API_PORT', 5000))
 
 app = Flask(__name__)
 
 def update_data():
     """Download price data, format data and train model."""
-    tokens = ["ETH", "BTC", "SOL"]
+    # tokens = ["ETH"]
+    tokens = ["ETH", "BNB", "ARB"]
     for token in tokens:
         download_data(token)
         format_data(token)
@@ -16,10 +26,11 @@ def update_data():
 def get_token_inference(token):
     return forecast_price.get(token, 0)
 
+
 @app.route("/inference/<string:token>")
 def generate_inference(token):
     """Generate inference for given token."""
-    if not token or token not in ["ETH", "BTC", "SOL"]:
+    if not token or token not in ["ETH", "BNB", "ARB"]:
         error_msg = "Token is required" if not token else "Token not supported"
         return Response(json.dumps({"error": error_msg}), status=400, mimetype='application/json')
 
@@ -38,6 +49,7 @@ def update():
     except Exception:
         return "1"
 
+
 if __name__ == "__main__":
     update_data()
-    app.run(host="0.0.0.0", port=8011)
+    app.run(host="0.0.0.0", port=API_PORT)

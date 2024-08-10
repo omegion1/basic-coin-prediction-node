@@ -12,30 +12,30 @@
     },
     "worker": [
         {
-            "topicId": 1,
+            "topicId": 7,
             "inferenceEntrypointName": "api-worker-reputer",
             "loopSeconds": 5,
             "parameters": {
-                "InferenceEndpoint": "http://inference:8011/inference/{Token}",
+                "InferenceEndpoint": "http://inference:8013/inference/{Token}",
                 "Token": "ETH"
             }
         },
         {
-            "topicId": 3,
+            "topicId": 8,
             "inferenceEntrypointName": "api-worker-reputer",
             "loopSeconds": 5,
             "parameters": {
-                "InferenceEndpoint": "http://inference:8011/inference/{Token}",
-                "Token": "BTC"
+                "InferenceEndpoint": "http://inference:8013/inference/{Token}",
+                "Token": "BNB"
             }
         },
         {
-            "topicId": 5,
+            "topicId": 9,
             "inferenceEntrypointName": "api-worker-reputer",
             "loopSeconds": 5,
             "parameters": {
-                "InferenceEndpoint": "http://inference:8011/inference/{Token}",
-                "Token": "SOL"
+                "InferenceEndpoint": "http://inference:8013/inference/{Token}",
+                "Token": "ARB"
             }
         }
     ]

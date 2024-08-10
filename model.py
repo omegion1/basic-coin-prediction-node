@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 import numpy as np
 import torch
 from chronos import ChronosPipeline
+# from sklearn.model_selection import train_test_split
+# from sklearn.linear_model import LinearRegression
 from updater import download_binance_minute_data
 from config import data_base_path
 import random
@@ -44,11 +46,11 @@ def format_data(token):
 
         if not zip_file_path.endswith(".zip"):
             continue
-        
+
         try:
             myzip = ZipFile(zip_file_path)
-        except:
-            print(f"Error reading {zip_file_path}")
+        except Exception as e:
+            print(f"Error reading zip file {zip_file_path}: {e}")
             continue
         
         with myzip.open(myzip.filelist[0]) as f:
@@ -93,8 +95,8 @@ def train_model(token):
     # Set the date column as the index for resampling
     price_data.set_index("date", inplace=True)
 
-    # Resample the data to 10-minute frequency and compute the mean price
-    df = price_data.resample('10T').mean()
+    # Resample the data to 20-minute frequency and compute the mean price
+    df = price_data.resample('20T').mean()
 
     # Reset the index to have 'date' as a column again
     df.reset_index(inplace=True)
@@ -105,11 +107,16 @@ def train_model(token):
 
     # print(df.head())
 
+
     context = torch.tensor(df["price"].values)
     prediction_length = 1 # Dự đoán giá tiếp theo
 
+    # hiển thị thời gian dự đoán hiện tại
+    time_start = datetime.now()
+
     # Huấn luyện mô hình Chronos-T5-Tiny 
     pipeline = ChronosPipeline.from_pretrained("amazon/chronos-t5-tiny", device_map="auto", torch_dtype=torch.bfloat16)
+
     forecast = pipeline.predict(context, prediction_length, num_samples=20)
 
     forecast = np.unique(forecast)
@@ -121,6 +128,10 @@ def train_model(token):
 
     # Chọn ngẫu nhiên một giá trị giữa giá thấp nhất và giá cao nhất, để tránh dự đoán giống nhau
     price_predict = random.uniform(min_price, max_price)
+    # gia_tri_2 = round(random.uniform(min_price, max_price), 2)
+    # gia_tri_3 = round(random.uniform(min_price, max_price), 2)
+    # print(f"{gia_tri_1} - {gia_tri_2} - {gia_tri_3}")
+
     forecast_price[token] = price_predict
 
     # median = np.median(forecast.numpy(), axis=1)
@@ -128,8 +139,12 @@ def train_model(token):
 
     print(f"Forecasted price for {token}: {forecast_price[token]}")
 
+    time_end = datetime.now()
+    print(f"Time elapsed forecast: {time_end - time_start}")
+
 def update_data():
-    tokens = ["ETH", "BTC", "SOL"]
+    # tokens = ["ETH"]
+    tokens = ["ETH", "BNB", "ARB"]
     for token in tokens:
         download_data(token)
         format_data(token)
