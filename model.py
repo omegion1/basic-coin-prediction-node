@@ -49,20 +49,20 @@ def format_data(token):
             continue
         
         try:
-            with ZipFile(zip_file_path) as myzip:
-                with myzip.open(myzip.filelist[0]) as f:
-                    header = 0 if f.readline().decode("utf-8").startswith("open_time") else None
-                df = pd.read_csv(myzip.open(myzip.filelist[0]), header=header).iloc[:, :11]
-                df.columns = [
-                    "start_time", "open", "high", "low", "close", "volume",
-                    "end_time", "volume_usd", "n_trades", "taker_volume", "taker_volume_usd"
-                ]
-                df.index = [pd.Timestamp(x + 1, unit="ms") for x in df["end_time"]]
-                df.index.name = "date"
-                price_df = pd.concat([price_df, df])
+            myzip = ZipFile(zip_file_path)
         except:
-            print(f"Error reading {zip_file_path}")
             continue
+        
+        with myzip.open(myzip.filelist[0]) as f:
+            header = 0 if f.readline().decode("utf-8").startswith("open_time") else None
+        df = pd.read_csv(myzip.open(myzip.filelist[0]), header=header).iloc[:, :11]
+        df.columns = [
+            "start_time", "open", "high", "low", "close", "volume",
+            "end_time", "volume_usd", "n_trades", "taker_volume", "taker_volume_usd"
+        ]
+        df.index = [pd.Timestamp(x + 1, unit="ms") for x in df["end_time"]]
+        df.index.name = "date"
+        price_df = pd.concat([price_df, df])
 
     price_df.sort_index().to_csv(os.path.join(data_base_path, f"{token.lower()}_price_data.csv"))
 
