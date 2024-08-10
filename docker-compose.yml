@@ -4,6 +4,8 @@ services:
     build:
       context: .
     command: python -u /app/app.py
+    environment:
+      - API_PORT=8012
     ports:
       - "8012:8012"
     healthcheck:
@@ -25,7 +27,7 @@ services:
       sh -c "
       while true; do
         python -u /app/update_app.py;
-        sleep 12h;
+        sleep 4h;
       done
       "
     depends_on:

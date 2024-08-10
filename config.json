@@ -1,11 +1,11 @@
 {
     "wallet": {
         "addressKeyName": "test",
-        "addressRestoreMnemonic": "",
+        "addressRestoreMnemonic": "just clap slim ...",
         "alloraHomeDir": "",
         "gas": "1000000",
         "gasAdjustment": 1.0,
-        "nodeRpc": "https://allora-rpc.devnet.behindthecurtain.xyz",
+        "nodeRpc": "https://sentries-rpc.testnet-1.testnet.allora.network",
         "maxRetries": 1,
         "delay": 1,
         "submitTx": false
