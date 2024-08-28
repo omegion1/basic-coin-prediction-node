@@ -5,9 +5,9 @@
         "alloraHomeDir": "",
         "gas": "1000000",
         "gasAdjustment": 1.0,
-        "nodeRpc": "https://allora-rpc.testnet-1.testnet.allora.network",
-        "maxRetries": 2,
-        "delay": 1,
+        "nodeRpc": "https://allora-rpc.testnet.allora.network",
+        "maxRetries": 3,
+        "delay": 5,
         "submitTx": false
     },
     "worker": [
