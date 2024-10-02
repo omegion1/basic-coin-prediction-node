@@ -2,7 +2,7 @@
 
 import json
 
-# –?nh nghia file g?c config.json
+# √ê?nh nghia file g?c config.json
 config_template = {
     "wallet": {
         "addressKeyName": "test1",
@@ -10,7 +10,7 @@ config_template = {
         "alloraHomeDir": "",
         "gas": "auto",
         "gasAdjustment": 1.5,
-        "nodeRpc": "http://65.108.204.245:32657/",
+        "nodeRpc": "",
         "maxRetries": 10,
         "delay": 4,
         "submitTx": True
@@ -46,7 +46,7 @@ config_template = {
     ]
 }
 
-# H‡m d? t?o c·c file config
+# H√†m d? t?o c√°c file config
 def generate_configs(num_files):
     for i in range(1, num_files + 1):
         # T?o b?n sao c?a template
@@ -55,7 +55,7 @@ def generate_configs(num_files):
         # C?p nh?t "addressKeyName" cho t?ng file
         config_data['wallet']['addressKeyName'] = f'test{i}'
         
-        # TÍn file
+        # T√™n file
         file_name = f'config_{i}.json'
         
         # Ghi n?i dung ra file json
@@ -64,5 +64,5 @@ def generate_configs(num_files):
         
         print(f'{file_name} created successfully.')
 
-# G?i h‡m d? t?o c·c file (vÌ d? t?o 10 file)
+# G?i h√†m d? t?o c√°c file (v√≠ d? t?o 10 file)
 generate_configs(100)
