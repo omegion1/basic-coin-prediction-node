@@ -160,7 +160,7 @@ def train_model(token, epochs=10, learning_rate=0.001):
 
 # Khởi chạy các chức năng chính
 if __name__ == "__main__":
-    tokens = ["btc", "eth", "sol"]  # Danh sách các đồng tiền điện tử
+    tokens = ["ETH", "BTC", "SOL"]  # tokens = ["ETH", "BNB", "ARB"] Danh sách các đồng tiền điện tử 
     for token in tokens:
         print(f"Processing token: {token}")  # In ra thông báo đang xử lý token nào
         download_data(token)  # Tải dữ liệu
